@@ -1,0 +1,76 @@
+方法一：
+#!/bin/bash
+
+ useradd $1
+ echo "$2" | passwd --stdin  "$1"
+
+注意：需要在运行脚本后面输入相应的参数
+
+方法二：
+
+#!/bin/bash
+
+read -p "请输入用户名: "user
+
+if
+
+[ -z $user ];then       #使用-z 可以判断一个变量是否为空,如果为空,提示用户必须输入账户名,并退出脚本,退出码为 2
+
+echo "您不需输入账户名"
+
+exit 2                  #没有输入用户名脚本退出后,使用$?查看的返回码为 2
+
+ fi
+
+
+ stty -echo       #使用 stty -echo 关闭 shell 的回显功能
+
+ read -p "请输入密码: "pass
+
+ stty echo        #使用 stty echo 打开 shell 的回显功能
+
+ pass=${pass:-123456}
+
+ useradd    "$user"
+
+ echo  "$pass" | passwd  --stdin  "$user"
+
+
+方法三：
+
+
+使用 user.txt 文件中的人员名单,在计算机中自动创建对应的账户并配置初始密码
+
+#!/bin/bash
+
+#本脚本执行,需要提前准备一个 user.txt 文件,该文件中包含有若干用户名信息
+
+for i in `cat user.txt`
+
+do
+
+useradd $i
+
+echo "123456" | passwd --stdin $i
+
+done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
